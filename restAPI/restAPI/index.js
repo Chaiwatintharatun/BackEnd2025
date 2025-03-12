@@ -168,17 +168,32 @@ app.get("/product", (req, res) => {
 });
 
 // route to get a product by id
+// app.get("/product/:id", (req, res) => {
+//   product.findByPk(req.params.id).then((product) => {
+//     if (!product) {
+//       res.status(404).send("product not found");
+//     } else {
+//       res.json(product);
+//     }
+//   }).catch((err) => {
+//     res.status(500).send(err);
+//   });
+// });
+
 app.get("/product/:id", (req, res) => {
+  console.log("Received request for product ID:", req.params.id); 
   product.findByPk(req.params.id).then((product) => {
     if (!product) {
-      res.status(404).send("product not found");
-    } else {
-      res.json(product);
+      console.log("Product not found for ID:", req.params.id);
+      return res.status(404).send("Product not found");
     }
+    res.json(product);
   }).catch((err) => {
+    console.error("Error in fetching product:", err);
     res.status(500).send(err);
   });
 });
+
 
 app.post("/product", (req, res) => {
   product.create(req.body).then((product) => {
